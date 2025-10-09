@@ -31,6 +31,8 @@ jobs:
         with:
           rustflags: "-A warnings -A unexpected-cfgs -A unused-macros -A static-mut-refs -A unused-variables -A unused-imports"
           cache: false
+      - name: 安装lxml依赖
+        run: sudo apt-get update && sudo apt-get install -y libxml2-dev libxslt1-dev
       - name: Build wheels
         run: |
           python3 -m venv wheelbuilder_venv
