@@ -33,6 +33,21 @@ jobs:
           cache: false
       - name: 安装lxml依赖
         run: dnf install -y libxml2-devel libxslt-devel
+      - name: 安装系统构建依赖（RHEL/CentOS）
+        run: |
+          sudo dnf install -y \
+            libxml2-devel \
+            libxslt-devel \
+            openblas-devel \
+            lapack-devel \
+            blas-devel \
+            gcc \
+            gcc-gfortran \
+            python3-devel \
+            cmake \
+            pkgconfig \
+            make \
+            git
       - name: Build wheels
         run: |
           python3 -m venv wheelbuilder_venv
