@@ -42,6 +42,7 @@ jobs:
             lapack-devel \
             blas-devel \
             gcc \
+            gcc-c++ \
             gcc-gfortran \
             python3-devel \
             cmake \
