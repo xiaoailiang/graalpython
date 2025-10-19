@@ -14,7 +14,9 @@ jobs:
   build_wheels:
     runs-on:
       - ubuntu-latest
-    container: quay.io/pypa/manylinux_2_28_x86_64
+    container: 
+      image: quay.io/pypa/manylinux_2_28_x86_64
+      options: --cpus 4 # 增加CPU资源
     env:
       PACKAGES_TO_BUILD: ${{ inputs.packages }}
     steps:
@@ -64,11 +66,20 @@ jobs:
           toolchain: stable
           profile: minimal
           override: true
-          
+      - name: Set environment for faster builds
+        run: |
+          # 限制并行度,避免内存溢出
+          echo "NPY_NUM_BUILD_JOBS=2" >> $GITHUB_ENV
+          echo "SCIPY_NUM_BUILD_JOBS=2" >> $GITHUB_ENV
+          # 使用更快的链接器
+          echo "LDFLAGS=-fuse-ld=gold" >> $GITHUB_ENV
       - name: Build wheels
         run: |
           python3 -m venv wheelbuilder_venv
+          #使用依赖约束
           export PIP_CONSTRAINT="${PWD}/constraints.txt"
+          # 确保虚拟环境中也使用预编译的 NumPy
+          wheelbuilder_venv/bin/python3 -m pip install --only-binary=:all: numpy
           wheelbuilder_venv/bin/python3 scripts/wheelbuilder/build_wheels.py ${{ inputs.graalpy_url }}
       - name: Store wheels
         uses: actions/upload-artifact@main
