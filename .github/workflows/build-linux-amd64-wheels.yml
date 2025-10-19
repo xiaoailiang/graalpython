@@ -64,14 +64,11 @@ jobs:
           toolchain: stable
           profile: minimal
           override: true
-      - name: Pre-install compatible grpcio
-        run: |
-          python3 -m pip install grpcio==1.72.0rc1
           
       - name: Build wheels
         run: |
           python3 -m venv wheelbuilder_venv
-          wheelbuilder_venv/bin/python3 -m pip install grpcio==1.72.0rc1
+          export PIP_CONSTRAINT="${PWD}/constraints.txt"
           wheelbuilder_venv/bin/python3 scripts/wheelbuilder/build_wheels.py ${{ inputs.graalpy_url }}
       - name: Store wheels
         uses: actions/upload-artifact@main
