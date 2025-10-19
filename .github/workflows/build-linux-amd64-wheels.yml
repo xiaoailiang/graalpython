@@ -57,7 +57,19 @@ jobs:
           python3 -m pip install --upgrade pip setuptools wheel
           # meson/ninja/pythran/pybind11 在 SciPy 构建阶段必须可用
           python3 -m pip install meson ninja pythran pybind11
-      
+      - name: Install qdrant-client with specific grpcio version
+        run: |
+          # 创建约束文件
+          cat > constraints.txt << 'EOF'
+          grpcio==1.72.0rc1
+          EOF
+          
+          # 使用约束文件安装
+          python3 -m pip install --constraint constraints.txt qdrant-client==1.15.1
+          
+          # 验证版本
+          python3 -c "import grpc, qdrant_client; print(f'grpcio: {grpc.__version__}, qdrant-client: {qdrant_client.__version__}')"
+
       - name: Install Rust toolchain (actions-rs)
         uses: actions-rs/toolchain@v1
         with:
