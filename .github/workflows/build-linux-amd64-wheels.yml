@@ -59,7 +59,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip setuptools wheel
           # meson/ninja/pythran/pybind11 在 SciPy 构建阶段必须可用
-          python3 -m pip install meson ninja pythran pybind11
+          python3 -m pip install meson ninja pybind11
 
       - name: Install Rust toolchain (actions-rs)
         uses: actions-rs/toolchain@v1
