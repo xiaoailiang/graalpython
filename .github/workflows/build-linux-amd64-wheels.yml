@@ -65,7 +65,7 @@ jobs:
           EOF
           
           # 使用约束文件安装
-          python3 -m pip install --constraint constraints.txt qdrant-client==1.15.1
+          python3 -m pip install --constraint constraints.txt qdrant-client==1.15.0
           
           # 验证版本
           python3 -c "import grpc, qdrant_client; print(f'grpcio: {grpc.__version__}, qdrant-client: {qdrant_client.__version__}')"
