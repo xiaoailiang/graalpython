@@ -36,16 +36,19 @@ jobs:
       - name: Install system build dependencies (dnf)
         run: |
           # 如果需要 epel（ninja 在 epel 可用），先尝试启用
-          dnf -y install epel-release || true
+          dnf -y install epel-release
+          dnf -y config-manager --set-enabled crb
           dnf -y update
+          # 安装开发工具组
           dnf -y groupinstall "Development Tools"
+          # 安装基础编译工具和依赖
           dnf -y install \
-            gcc gcc-c++ gcc-gfortran gfortran make cmake pkgconfig git\
+            gcc gcc-c++ gcc-gfortran make cmake pkgconfig git\
             python3-devel python3-pip python3-virtualenv \
             openblas-devel lapack-devel blas-devel\
             libgcrypt-devel libgpg-error-devel \
             libxml2-devel libxslt-devel xz-devel \
-            ninja-build libjpeg-turbo-devel zlib-devel libpng-devel pillow  
+            ninja-build libjpeg-turbo-devel zlib-devel libpng-devel  
       
       - name: Pre-install Python build-time tools
         run: |
