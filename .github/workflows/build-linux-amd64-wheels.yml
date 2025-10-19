@@ -19,6 +19,7 @@ jobs:
       options: --cpus 4 # 增加CPU资源
     env:
       PACKAGES_TO_BUILD: ${{ inputs.packages }}
+      SCIPY_USE_PYTHRAN: "0"  # 在这里全局设置
     steps:
       - name: Install dependencies
         run: |
