@@ -75,6 +75,7 @@ jobs:
           echo "LDFLAGS=-fuse-ld=gold" >> $GITHUB_ENV
       - name: Build wheels
         run: |
+          export SCIPY_USE_PYTHRAN=0
           python3 -m venv wheelbuilder_venv
           #使用依赖约束
           export PIP_CONSTRAINT="${PWD}/constraints.txt"
