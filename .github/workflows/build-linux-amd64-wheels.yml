@@ -45,7 +45,7 @@ jobs:
             openblas-devel lapack-devel blas-devel\
             libgcrypt-devel libgpg-error-devel \
             libxml2-devel libxslt-devel xz-devel \
-            ninja-build
+            ninja-build libjpeg-turbo-devel zlib-devel libpng-devel pillow  
       
       - name: Pre-install Python build-time tools
         run: |
