@@ -33,22 +33,33 @@ jobs:
           cache: false
       - name: 安装lxml依赖
         run: dnf install -y libxml2-devel libxslt-devel
-      - name: 安装系统构建依赖（RHEL/CentOS）
+      - name: Install system build dependencies (dnf)
         run: |
-            dnf install -y \
-            libxml2-devel \
-            libxslt-devel \
-            openblas-devel \
-            lapack-devel \
-            blas-devel \
-            gcc \
-            gcc-c++ \
-            gcc-gfortran \
-            python3-devel \
-            cmake \
-            pkgconfig \
-            make \
-            git
+          # 如果需要 epel（ninja 在 epel 可用），先尝试启用
+          dnf -y install epel-release || true
+          dnf -y update
+          dnf -y groupinstall "Development Tools"
+          dnf -y install \
+            gcc gcc-c++ gcc-gfortran gfortran make cmake pkgconfig git\
+            python3-devel python3-pip python3-virtualenv \
+            openblas-devel lapack-devel blas-devel\
+            libgcrypt-devel libgpg-error-devel \
+            libxml2-devel libxslt-devel xz-devel \
+            ninja-build
+      
+      - name: Pre-install Python build-time tools
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          # meson/ninja/pythran/pybind11 在 SciPy 构建阶段必须可用
+          python3 -m pip install meson ninja pythran pybind11
+      
+      - name: Install Rust toolchain (actions-rs)
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          
       - name: Build wheels
         run: |
           python3 -m venv wheelbuilder_venv
