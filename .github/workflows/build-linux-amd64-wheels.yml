@@ -75,8 +75,13 @@ jobs:
           # 使用更快的链接器
           echo "LDFLAGS=-fuse-ld=gold" >> $GITHUB_ENV
       - name: Build wheels
+        env:
+            SCIPY_USE_PYTHRAN: "0"  # 步骤级别再次确认
         run: |
+          # Shell 级别再次设置
           export SCIPY_USE_PYTHRAN=0
+          # 验证环境变量
+          echo "SCIPY_USE_PYTHRAN = $SCIPY_USE_PYTHRAN"
           python3 -m venv wheelbuilder_venv
           #使用依赖约束
           export PIP_CONSTRAINT="${PWD}/constraints.txt"
